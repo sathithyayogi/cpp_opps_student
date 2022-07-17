@@ -39,11 +39,14 @@ public:
         }
     }
 
- 
-
     int getStudentPin()
     {
         return student_pin;
+    }
+
+    string getStudentName()
+    {
+        return student_name;
     }
 
     long int getStudentMobileNumber()
@@ -54,7 +57,6 @@ public:
     // we are having this below abstraction, because different department student has different scholarship eleigibility and college fee structure
     virtual int getStudentsCollegeFee() = 0;
     virtual void eligibleForScholarship() = 0;
-
 };
 
 // inheritance
@@ -66,14 +68,61 @@ private:
     double tution_fee;
     string student_status;
 
-
 public:
     ComputerScienceStudent(
         string student_name_a,
         long int student_mobile_number_a,
         int student_pin_a,
         int student_credits_a,
-        double student_gpa_a,string student_status_a) : Student(student_name_a, student_mobile_number_a, student_pin_a)
+        double student_gpa_a, string student_status_a) : Student(student_name_a, student_mobile_number_a, student_pin_a)
+    {
+        student_credits = student_credits_a;
+        student_gpa = student_gpa_a;
+        student_status = student_status_a;
+    }
+
+    int getStudentsCredits()
+    {
+        return student_credits;
+    }
+
+    int getStudentGPA()
+    {
+        return student_gpa;
+    }
+
+    int getStudentsCollegeFee()
+    {
+        // need to implement the code
+        return 500;
+    }
+
+    void eligibleForScholarship()
+    {
+        if (student_gpa > 3.8)
+        {
+            cout << "you are in dean's list and you are eligible to apply for scholarship ";
+            return;
+        }
+        cout << "Sorry you are not in dean's list.";
+    }
+};
+
+class ScienceStudent : public Student
+{
+private:
+    int student_credits;
+    double student_gpa;
+    double tution_fee;
+    string student_status;
+
+public:
+    ScienceStudent(
+        string student_name_a,
+        long int student_mobile_number_a,
+        int student_pin_a,
+        int student_credits_a,
+        double student_gpa_a, string student_status_a) : Student(student_name_a, student_mobile_number_a, student_pin_a)
     {
         student_credits = student_credits_a;
         student_gpa = student_gpa_a;
@@ -88,14 +137,13 @@ public:
 
     void eligibleForScholarship()
     {
-        if(student_gpa > 3.8)
+        if (student_gpa > 3.8)
         {
             cout << "you are in dean's list and you are eligible to apply for scholarship ";
             return;
         }
         cout << "Sorry you are not in dean's list.";
     }
-
 };
 
 int main()
@@ -112,7 +160,6 @@ int main()
 
     int choice;
     int stu_status_choice;
-
 
     defaultPinNumber = rand() % 10000;
 
@@ -141,32 +188,30 @@ int main()
         break;
     case 2:
         status = "Non-resident-intl";
-        break;    
-   case 3:
+        break;
+    case 3:
         status = "Non-WA-resident-eLearning";
         break;
-     case 4:
+    case 4:
         status = "BAS-resident";
         break;
-      case 5:
+    case 5:
         status = "BAS-Non-resident-intl";
         break;
-           
+
     default:
         status = "Wa-resident";
         break;
     }
 
-
     // constructor
 
-    ComputerScienceStudent studentOne = ComputerScienceStudent(name, mobileNumber, defaultPinNumber, credits, gpa,status);
+    ComputerScienceStudent studentOne = ComputerScienceStudent(name, mobileNumber, defaultPinNumber, credits, gpa, status);
 
     cout << "Your Account is created, your Student Pin is : ";
     cout << defaultPinNumber;
 
     // system("cls");
-
 
     cout << endl
          << "*** Welcome to Syracuse University ***";
@@ -183,7 +228,8 @@ int main()
 
         system("cls");
 
-        cout << "*** Welcome to Syracuse University ***"<< endl;
+        do{
+        cout << "*** Welcome to Syracuse University ***" << endl;
         cout << "*** 1) Check Your Profile ***" << endl;
         cout << "*** 2) Update your Pin ***" << endl;
         cout << "*** 3) Check College Fee ***" << endl;
@@ -194,14 +240,16 @@ int main()
         switch (choice)
         {
         case 1:
-            cout << "Name : ";
+            cout << "Name : " + studentOne.getStudentName() << endl;
+            cout << "Mobile Number : "  + studentOne.getStudentMobileNumber()  << endl;;
+            cout << "Credits Taken : " + studentOne.getStudentsCredits() << endl;;
+            cout << "GPA : "  + studentOne.getStudentGPA() << endl;
             break;
-            
-        
+
         default:
             break;
         }
-
+        }while(1);
 
     }
     else
