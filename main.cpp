@@ -157,15 +157,6 @@ int main()
         break;
     }
 
-    Student sss;
-
-    if(type = "com") {
-        sss = new Compur();
-    }
-    if(type = "com") {
-        sss = new Compur();
-    }
-
 
     // constructor
 
