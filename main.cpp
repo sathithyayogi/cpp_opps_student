@@ -28,13 +28,13 @@ public:
             student_pin = new_pin;
 
             cout << endl
-                 << "Successfully updated your pin!";
+                 << "Successfully updated your pin!" << endl;
             _getch();
         }
         else
         {
             cout << endl
-                 << "Oops! Enter valid current pin";
+                 << "Oops! Enter valid current pin" << endl;
             _getch();
         }
     }
@@ -55,7 +55,7 @@ public:
     }
 
     // we are having this below abstraction, because different department student has different scholarship eleigibility and college fee structure
-    virtual int getStudentsCollegeFee() = 0;
+    virtual string getStudentsCollegeFee() = 0;
     virtual void eligibleForScholarship() = 0;
 };
 
@@ -67,6 +67,7 @@ private:
     double student_gpa;
     double tution_fee;
     string student_status;
+    string fees;
 
 public:
     ComputerScienceStudent(
@@ -81,6 +82,11 @@ public:
         student_status = student_status_a;
     }
 
+    string getStudentStatus()
+    {
+        return student_status;
+    }
+
     int getStudentsCredits()
     {
         return student_credits;
@@ -91,10 +97,123 @@ public:
         return student_gpa;
     }
 
-    int getStudentsCollegeFee()
+    int getNumCredits()
     {
-        // need to implement the code
-        return 500;
+        return student_credits;
+    }
+
+    string getStudentsCollegeFee()
+    {
+
+        if (tution_fee < 0)
+        {
+            throw std::invalid_argument("not a valid tuition!");
+        }
+        else
+        {
+            if (getStudentStatus().compare("Wa-resident"))
+            {
+                if (getNumCredits() > 0 && getNumCredits() <= 10)
+                {
+                    tution_fee = getNumCredits() * 113.04;
+                }
+                else if (getNumCredits() > 10 && getNumCredits() <= 19)
+                {
+                    tution_fee = 1130.4 + ((getNumCredits() - 10) * 55.94);
+                }
+                else if (getNumCredits() > 19 && getNumCredits() <= 25)
+                {
+                    tution_fee = 1679.34 + ((getNumCredits() - 19) * 101.41);
+                }
+                else
+                {
+                    tution_fee = 0.0;
+                }
+            }
+            else if (getStudentStatus().compare("Non-resident-intl"))
+            {
+                if (getNumCredits() > 0 && getNumCredits() <= 10)
+                {
+                    tution_fee = getNumCredits() * 291.28;
+                }
+                else if (getNumCredits() > 10 && getNumCredits() < 19)
+                {
+                    tution_fee = 2912.80 + ((getNumCredits() - 10) * 63.22);
+                }
+                else if (getNumCredits() > 18 && getNumCredits() <= 25)
+                {
+                    tution_fee = 3418.56 + ((getNumCredits() - 18) * 279.66);
+                }
+                else
+                {
+                    tution_fee = 0.0;
+                }
+            }
+            else if (getStudentStatus().compare("Non-WA-resident-eLearning"))
+            {
+                if (getNumCredits() > 0 && getNumCredits() <= 10)
+                {
+                    tution_fee = getNumCredits() * 220.51;
+                }
+                else if (getNumCredits() > 10 && getNumCredits() < 19)
+                {
+                    tution_fee = 2205.10 + ((getNumCredits() - 10) * 11.04);
+                }
+                else if (getNumCredits() > 18 && getNumCredits() <= 25)
+                {
+                    tution_fee = 2293.42 + ((getNumCredits() - 18) * 208.89);
+                }
+                else
+                {
+                    tution_fee = 0.0;
+                }
+            }
+            else if (getStudentStatus().compare("BAS-resident"))
+            {
+                if (getNumCredits() > 0 && getNumCredits() <= 10)
+                {
+                    tution_fee = getNumCredits() * 235.47;
+                }
+                else if (getNumCredits() > 10 && getNumCredits() < 19)
+                {
+                    tution_fee = 2354.70 + ((getNumCredits() - 10) * 11.84);
+                }
+                else if (getNumCredits() > 18 && getNumCredits() <= 25)
+                {
+                    tution_fee = 2449.42 + ((getNumCredits() - 18) * 208.89);
+                }
+                else
+                {
+                    tution_fee = 0.0;
+                }
+            }
+            else if (getStudentStatus().compare("BAS-Non-resident-intl"))
+            {
+                if (getNumCredits() > 0 && getNumCredits() <= 10)
+                {
+                    tution_fee = getNumCredits() * 620.30;
+                }
+                else if (getNumCredits() > 10 && getNumCredits() < 19)
+                {
+                    tution_fee = 6203.00 + ((getNumCredits() - 10) * 11.84);
+                }
+                else if (getNumCredits() > 18 && getNumCredits() <= 25)
+                {
+                    tution_fee = 6297.72 + ((getNumCredits() - 18) * 608.68);
+                }
+                else
+                {
+                    tution_fee = 0.0;
+                }
+            }
+
+            else
+            {
+                tution_fee = 0.0;
+            }
+            fees = to_string(tution_fee);
+            return fees;
+        }
     }
 
     void eligibleForScholarship()
@@ -129,10 +248,9 @@ public:
         student_status = student_status_a;
     }
 
-    int getStudentsCollegeFee()
+    string getStudentsCollegeFee()
     {
-        // need to implement the code
-        return 500;
+        return "500";
     }
 
     void eligibleForScholarship()
@@ -157,20 +275,26 @@ int main()
     int credits;
     double gpa;
     string status;
+    long int Ch_currentpin, Ch_new_pin;
+    int collegeDept;
 
     int choice;
     int stu_status_choice;
 
     defaultPinNumber = rand() % 10000;
 
-    cout << "Enter Your Name : " << endl;
+    cout << "Enter Your Name : ";
     cin >> name;
-    cout << "Enter Your Mobile Number : " << endl;
+    cout << "Enter Your Mobile Number : ";
     cin >> mobileNumber;
-    cout << "Enter Your no credits that you are going to take  : " << endl;
+    cout << "Enter Your no credits that you are going to take  : ";
     cin >> credits;
-    cout << "Enter Your GPA  : " << endl;
+    cout << "Enter Your GPA  : ";
     cin >> gpa;
+    cout << "Enter Your College Department  : " << endl;
+    cout << "1) Computer Science " << endl;
+    cout << "2) Science " << endl;
+    cin >> collegeDept;
 
     cout << "Select your Status " << endl;
     cout << "1) Wa-resident " << endl;
@@ -206,7 +330,11 @@ int main()
 
     // constructor
 
-    ComputerScienceStudent studentOne = ComputerScienceStudent(name, mobileNumber, defaultPinNumber, credits, gpa, status);
+   
+
+        ComputerScienceStudent studentOne = ComputerScienceStudent(name, mobileNumber, defaultPinNumber, credits, gpa, status);
+   
+        // ScienceStudent studentOne = ScienceStudent(name, mobileNumber, defaultPinNumber, credits, gpa, status);
 
     cout << "Your Account is created, your Student Pin is : ";
     cout << defaultPinNumber;
@@ -228,29 +356,37 @@ int main()
 
         system("cls");
 
-        do{
-        cout << "*** Welcome to Syracuse University ***" << endl;
-        cout << "*** 1) Check Your Profile ***" << endl;
-        cout << "*** 2) Update your Pin ***" << endl;
-        cout << "*** 3) Check College Fee ***" << endl;
-        cout << "*** 4) Print College Fee ***" << endl;
-
-        cin >> choice;
-
-        switch (choice)
+        do
         {
-        case 1:
-            cout << "Name : " + studentOne.getStudentName() << endl;
-            cout << "Mobile Number : "  + studentOne.getStudentMobileNumber()  << endl;;
-            cout << "Credits Taken : " + studentOne.getStudentsCredits() << endl;;
-            cout << "GPA : "  + studentOne.getStudentGPA() << endl;
-            break;
+            cout << "*** Welcome to Syracuse University ***" << endl;
+            cout << "*** 1) Check Your Profile ***" << endl;
+            cout << "*** 2) Update your Pin ***" << endl;
+            cout << "*** 3) Check College Fee ***" << endl;
 
-        default:
-            break;
-        }
-        }while(1);
+            cin >> choice;
 
+            switch (choice)
+            {
+            case 1:
+                cout << "Name : " + studentOne.getStudentName() << endl;
+                cout << "Mobile Number : " + studentOne.getStudentMobileNumber() << endl;
+                cout << "Credits Taken : " + studentOne.getStudentsCredits() << endl;
+                cout << "GPA : " + studentOne.getStudentGPA() << endl;
+                break;
+            case 2:
+                cout << "Enter your Old Pin : ";
+                cin >> Ch_currentpin;
+                cout << "Enter your Current Pin : ";
+                cin >> Ch_new_pin;
+                studentOne.changPin(Ch_currentpin, Ch_new_pin);
+                break;
+            case 3:
+                cout << " Your College Fee is " + studentOne.getStudentsCollegeFee() << endl;
+                break;
+            default:
+                break;
+            }
+        } while (1);
     }
     else
     {
